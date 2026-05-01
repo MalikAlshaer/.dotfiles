@@ -1,4 +1,0 @@
--- ToggleTerm
---map('n', '<C-r>', ':ToggleTerm<CR>', silent)
---map('t', '<Esc>', [[<C-\><C-n>]], silent)
---require('toggleterm').setup()
