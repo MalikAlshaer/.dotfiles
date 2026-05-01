@@ -8,10 +8,10 @@ cmp.setup({
             require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
         end,
     },
---     window = {
---         completion = cmp.config.window.bordered(),
---         documentation = cmp.config.window.bordered(),
---     },
+     window = {
+         completion = cmp.config.window.bordered(),
+         documentation = cmp.config.window.bordered(),
+     },
 
     mapping = cmp.mapping.preset.insert({
         ['<C-b>'] = cmp.mapping.scroll_docs(-4),
@@ -61,19 +61,19 @@ cmp.setup.cmdline(':', {
 -- Disable LSP signs (icons in gutter) globally
 vim.diagnostic.config({
     virtual_text = false,   -- inline messages, set false if you want no virtual text
-    virtual_lines = true,
+    virtual_lines = false,
     signs = false,         -- disable error/warning icons
     underline = true,      -- keep underlines
-    update_in_insert = false,
+    update_in_insert = true,
 })
 
----- show floating diagnostic on cursor hold
---vim.o.updatetime = 250  -- adjust delay before CursorHold triggers
---
---vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
---  callback = function()
---    vim.diagnostic.open_float(nil, { focus = false })
---  end
---})
+-- show floating diagnostic on cursor hold
+vim.o.updatetime = 250  -- adjust delay before CursorHold triggers
 
-vim.lsp.enable({ "jedi_language_server", "rust_analyzer", "clangd" })
+vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
+  callback = function()
+    vim.diagnostic.open_float(nil, { focus = false })
+  end
+})
+
+vim.lsp.enable({ "jedi_language_server", "rust_analyzer", "clangd", "asm-lsp" })

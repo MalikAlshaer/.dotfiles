@@ -1,7 +1,7 @@
 -- Options
 vim.opt.encoding        = 'UTF-8'
 vim.opt.number          = true
-vim.opt.relativenumber = true
+vim.opt.relativenumber  = true
 vim.opt.mouse           = 'a'
 vim.opt.smarttab        = true
 vim.opt.shiftwidth      = 4
@@ -24,11 +24,11 @@ vim.opt.foldlevelstart  = 99
 vim.opt.foldenable      = true
 
 -- remove auto comment on new line in any filetype
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = '*',
-  callback = function()
-    -- equivalent to: setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-    local fo = vim.opt_local.formatoptions
-    fo:remove({ 'c', 'r', 'o' })
-  end,
-})
+-- vim.api.nvim_create_autocmd('FileType', {
+--   pattern = '*',
+--   callback = function()
+--     -- equivalent to: setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+--     local fo = vim.opt_local.formatoptions
+--     fo:remove({ 'c', 'r', 'o' })
+--   end,
+-- })
