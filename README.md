@@ -12,3 +12,5 @@
 - ``nm-applet`` (network manager)
 - ``feh`` (for wallpapers)
 - ``rofi`` (app launcher)
+
+or run ./install.sh
