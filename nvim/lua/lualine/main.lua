@@ -1,3 +1,26 @@
+local function get_nearest(severity)
+  local line = vim.fn.line('.') - 1
+  local diags = vim.diagnostic.get(0, { severity = severity })
+
+  table.sort(diags, function(a, b)
+    return math.abs(a.lnum - line) < math.abs(b.lnum - line)
+  end)
+
+  return diags[1]
+end
+
+local function warn_pos()
+    local d = get_nearest(vim.diagnostic.severity.WARN)
+    if not d then return "" end
+    return string.format("%d:%d", d.lnum + 1, d.col + 1)
+end
+
+local function error_pos()
+    local d = get_nearest(vim.diagnostic.severity.ERROR)
+    if not d then return "" end
+    return string.format("%d:%d", d.lnum + 1, d.col + 1)
+end
+
 require('lualine').setup {
     options = {
         icons_enabled = true,
@@ -38,17 +61,16 @@ require('lualine').setup {
         lualine_a = {'mode'},
         lualine_b = {
             {
-                'branch',
-
-                icon = '',
-            },
-            {
                 'diff',
+
+                cond = function()
+                    return vim.fn.mode() == 'n'
+                end,
 
                 colored = true,
 
                 diff_color = {
-                    added    = { fg = '#4A80B5' },
+                    added    = { fg = '#3f6f9e' },
                     modified = { fg = '#fA7232' },
                     removed  = { fg = '#BD3940' },
                 },
@@ -60,48 +82,26 @@ require('lualine').setup {
                 },
 
             },
-        },
-        lualine_c = {'filename'},
-        lualine_x = {'encoding', 'fileformat', 'filetype'},
-        lualine_y = {'progress', 'location'},
-        lualine_z = {
-            -- {
-            --     function()
-            --         local trailing_space = vim.fn.search([[\s\+$]], 'nw')
-            --         return trailing_space ~= 0 and ''..trailing_space or ''
-            --     end,
-            --     icon = 'Ξ',
-            --     color = {bg= '#fA7232', fg = '#1B2B34'}
-            -- },
-            -- {
-            --     function()
-            --         local space_indent = vim.fn.search([[\v^ +]], 'nw')
-            --         local tab_indent = vim.fn.search([[\v^\t+]], 'nw')
-            --         local mixed = (space_indent > 0 and tab_indent > 0)
-            --         return mixed and 'mixed-indent '..math.max(space_indent,tab_indent) or ''
-            --     end,
-            --     icon = 'Ξ',
-            --     color = {bg= '#fA7232', fg = '#1B2B34'}
-            -- },
             {
-                'diagnostics',
-                colored = true,
-                sources = { 'nvim_diagnostic' },
-                diagnostics_color = {
-                    error   = { bg = '#BD3940', fg = '#1B2B34' },
-                    warn    = { bg = '#fA7232', fg = '#1B2B34' },
-                    info    = { bg = '#4A80B5', fg = '#1B2B34' },
-                    hint    = { bg = '#20BD9d', fg = '#1B2B34' },
-                },
+                'branch',
 
-                symbols = {
-                    error   = "" ,
-                    warn    = "" ,
-                    info    = "" ,
-                    hint    = "" ,
-                },
+                icon = '',
+            },
+        },
+        lualine_c = { 'filename' },
+        lualine_x = { 'encoding', 'fileformat', 'filetype' },
+        lualine_y = { 'progress', { 'location' } },
+        lualine_z = {
+            {
+                warn_pos,
 
-                separator = {left = ''},
+                color = { fg = '#1B2B34', bg = '#ffaa00' },
+            },
+            {
+                separator = { left = '' },
+                error_pos,
+
+                color = { fg = '#1B2B34', bg = '#c91a0e' },
             },
         },
     },
@@ -155,15 +155,6 @@ require('lualine').setup {
                 separators = { left = '', right = ''},
 
                 show_close_icon = true,
-
-                -- diagnostics = 'nvim_lsp',
-                -- diagnostics_indicator = function(count, level)
-                --     local icon = level:match("error") and " "
-                --     or level:match("warning") and " "
-                --     or " "
-                --     return icon .. count
-                -- end,
-
             }
         },
         lualine_b = {},
@@ -173,7 +164,8 @@ require('lualine').setup {
         lualine_z = {
             {
                 'datetime',
-                style = '%H:%M'
+                style = '%H:%M',
+                color = { fg = '#1B2B34', bg = '#CDD3DE' },
             }
         },
     },
